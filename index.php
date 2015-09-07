@@ -93,7 +93,7 @@ if (\Controller\Auth::isLoggedIn()) {
     $f3->route('GET|POST /admin/settings/@type', 'Controller\Settings->@type');
 
     // no auth again
-    $f3->redirect('GET|POST /login', '/admin', false);
+    $f3->redirect('GET|POST @login:/login', '/admin', false);
 
     // upload file
     $f3->route('POST /admin/file [ajax]', function ($f3) {
@@ -110,10 +110,16 @@ if (\Controller\Auth::isLoggedIn()) {
 } else {
     // login
     $f3->redirect(array('GET|POST /admin/*','GET|POST /admin'), '/login', false);
-    $f3->route('GET|POST /login','Controller\Auth->login');
+    $f3->route('GET|POST @login:/login','Controller\Auth->login');
 }
 
-$f3->route('GET /logout', 'Controller\Auth->logout');
+$f3->route('GET @logout:/logout', 'Controller\Auth->logout');
+
+//multilang
+$f3->set('MULTILANG.languages',array('en'=>'en-GB,en','fr'=>'fr-FR,fr'));
+$f3->set('MULTILANG.global',array('login','logout','/admin'));
+Multilang::instance();
+
 
 // let's cross the finger
 $f3->run();
